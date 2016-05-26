@@ -1,0 +1,120 @@
+apiVersion: v1
+kind: Template
+metadata:
+  annotations:
+    description: 1&1 MySQL 5.7 Imagee
+  creationTimestamp: null
+  name: ubuntu-16-mysql-5.7
+objects:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    name: ${DATABASE_SERVICE_NAME}
+  spec:
+    portalIP: ""
+    ports:
+    - name: mysql
+      nodePort: 0
+      port: 3306
+      protocol: TCP
+      targetPort: 3306
+    selector:
+      name: ${APP_SERVICE_NAME}
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      description: Definition for deploying MySQL
+    labels:
+      service: ubuntu-16-mysql-5.7
+    name: ${APP_SERVICE_NAME}
+  spec:
+    replicas: 1
+    selector:
+      name: ${APP_SERVICE_NAME}
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          name: ${APP_SERVICE_NAME}
+          service: ubuntu-16-mysql-5.7
+        name: ${APP_SERVICE_NAME}
+      spec:
+        containers:
+        - env:
+          - name: MYSQL_USER
+            value: ${MYSQL_USER}
+          - name: MYSQL_PASSWORD
+            value: ${MYSQL_PASSWORD}
+          - name: MYSQL_ROOT_PASSWORD
+            value: ${MYSQL_ROOT_PASSWORD}
+          image: 1and1internet/ubuntu-16-mysql-5.7
+          imagePullPolicy: Always
+          name: ${APP_SERVICE_NAME}
+          livenessProbe:
+            initialDelaySeconds: 30
+            tcpSocket:
+              port: 3306
+            timeoutSeconds: 1
+          ports:
+          - containerPort: 3306
+          readinessProbe:
+            exec:
+              command:
+              - /bin/sh
+              - -i
+              - -c
+              - MYSQL_PWD="$MYSQL_PASSWORD" mysql -h 127.0.0.1 -u $MYSQL_USER -D $MYSQL_DATABASE
+                -e 'SELECT 1'
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          volumeMounts:
+          - mountPath: /var/lib/mysql/data
+            name: ${DATABASE_SERVICE_NAME}-data
+        volumes:
+        - emptyDir:
+            medium: ""
+          name: ${DATABASE_SERVICE_NAME}-data
+    triggers:
+    - type: ConfigChange
+parameters:
+- description: Size of Storage
+  displayName: DB directory size
+  name: VOLUME_CAPACITY
+  required: true
+  value: 5Gi
+- description: Application service name
+  displayName: Application service name
+  from: mysql-[0-9]{5}
+  generate: expression
+  name: APP_SERVICE_NAME
+  required: true
+- description: MySQL Username
+displayName: Username for MySQL
+from: user[A-Z0-9]{3}
+generate: expression
+name: MYSQL_USER
+required: true
+- description: MySQL Password
+displayName: Password for MySQL
+from: '[a-zA-Z0-9]{4}'
+generate: expression
+name: MYSQL_PASSWORD
+required: true
+- description: MySQL Root Password
+displayName: Password for MySQL Root User
+from: '[a-zA-Z0-9]{4}'
+generate: expression
+name: MYSQL_ROOT_PASSWORD
+required: true
+- description: Service Name for MySQL
+displayName: Service Name for MySQL
+  name: DATABASE_SERVICE_NAME
+  required: true
+  value: mysql
