@@ -11,7 +11,7 @@ end
 
 LISTEN_PORT=8080
 MYSQL_PORT=3306
-CONTAINER_START_DELAY=10
+CONTAINER_START_DELAY=25
 
 RSpec.configure do |c|
   @image = Docker::Image.get(ENV['IMAGE'])
@@ -19,7 +19,6 @@ RSpec.configure do |c|
   set :docker_image, @image.id
   set :docker_container_create_options, {
     'User'     => '100000',
-    'hostname' => 'snowflake',
     'HostConfig'   => {
       'PortBindings' => {
         "#{LISTEN_PORT}/tcp" => [ { 'HostPort' => "#{LISTEN_PORT}" } ],

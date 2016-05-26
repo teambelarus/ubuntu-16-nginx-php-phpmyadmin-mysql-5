@@ -1,9 +1,8 @@
 version: '2'
 services:
-  docker-ubuntu-16-nginx-1.10.0-php-7.0-phpmyadmin-4.6-mysql-5.7:
-    user: "1000000"
+  ubuntu-16-nginx-1.10.0-php-7.0-phpmyadmin-4.6-mysql-5.7:
     build: .
-    image: docker-ubuntu-16-nginx-1.10.0-php-7.0-phpmyadmin-4.6-mysql-5.7
+    image: ubuntu-16-nginx-1.10.0-php-7.0-phpmyadmin-4.6-mysql-5.7
     ports:
       - "3306:3306"
       - "8080:8080"
