@@ -9,6 +9,7 @@ if not ENV['IMAGE'] then
   puts "You must provide an IMAGE env variable"
 end
 
+PACKAGE_NAME='mysql-server'
 LISTEN_PORT=8080
 MYSQL_PORT=3306
 CONTAINER_START_DELAY=30
