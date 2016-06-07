@@ -11,7 +11,7 @@ end
 
 LISTEN_PORT=8080
 MYSQL_PORT=3306
-CONTAINER_START_DELAY=25
+CONTAINER_START_DELAY=30
 
 RSpec.configure do |c|
   @image = Docker::Image.get(ENV['IMAGE'])
