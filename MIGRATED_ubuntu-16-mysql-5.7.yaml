@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Template
 metadata:
   annotations:
-    description: 1&1 MySQL 5.7 Imagee
+    description: 1&1 MySQL 5.7 Image
   creationTimestamp: null
   name: ubuntu-16-mysql-5.7
 objects:
@@ -54,7 +54,7 @@ objects:
             value: ${MYSQL_PASSWORD}
           - name: MYSQL_ROOT_PASSWORD
             value: ${MYSQL_ROOT_PASSWORD}
-          image: 1and1internet/ubuntu-16-mysql-5.7
+          image: 1and1internet/ubuntu-16-nginx-1.10.0-php-7.0-phpmyadmin-4.6-mysql-5.7:latest
           imagePullPolicy: Always
           name: ${APP_SERVICE_NAME}
           livenessProbe:
