@@ -28,11 +28,10 @@ RSpec.configure do |c|
     }
   }
 
-  describe command("sleep #{CONTAINER_START_DELAY}") do
-    its(:stdout) { should eq "" }
-  end
-
   describe "tests" do
+    describe command("sleep #{CONTAINER_START_DELAY}") do
+      its(:stdout) { should eq "" }
+    end
     include_examples 'docker-ubuntu-16'
     include_examples 'docker-ubuntu-16-nginx-1.10.0'
     include_examples 'php-7.0-tests'

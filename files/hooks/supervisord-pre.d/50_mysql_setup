@@ -2,7 +2,7 @@
 set -eo pipefail
 
 # Get config
-DATADIR="$(mysqld --verbose --help 2>/dev/null | awk '$1 == "datadir" { print $2; exit }')"
+DATADIR="$(mysqld --verbose --help --innodb-read-only 2>/dev/null | awk '$1 == "datadir" { print $2; exit }')"
 
 if [ ! -d "$DATADIR/mysql" ]; then
     echo "mysql db dir does not yet exist"
@@ -15,7 +15,7 @@ if [ ! -d "$DATADIR/mysql" ]; then
     mkdir -p "$DATADIR"
 
     echo 'Initializing database'
-    mysqld --initialize-insecure
+    mysqld --initialize-insecure --verbose
     echo 'Database initialized'
 
     mysqld --skip-networking &
