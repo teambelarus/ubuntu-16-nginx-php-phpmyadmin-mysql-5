@@ -12,13 +12,17 @@ end
 
 LISTEN_PORT=8080
 MYSQL_PORT=3306
+CONTAINER_START_SLEEP=120
 
 describe "Dockerfile" do
   before(:all) do
+    puts "Building image"
     @image = Docker::Image.get(ENV['IMAGE'])
+    puts "Finished building image"
+    set :backend, :docker
   end
 
-  describe "DockerContainer" do
+  describe "Dockerfile#running" do
     before(:all)  do
       @container = Docker::Container.create(
         'Image'       => @image.id,
@@ -30,11 +34,31 @@ describe "Dockerfile" do
           }
         }
       )
-      @container.start
-      set :backend, :docker
+  
+      ret = @container.start
+      
+      ready_regex = /mysqld_safe Starting mysqld daemon with databases from \/var\/lib\/mysql/
+      counter=0
+      while counter < CONTAINER_START_SLEEP do
+        match = @container.logs({ :stdout => true }).split("\n").grep(ready_regex)
+        unless match.empty? then
+          puts "MySQL should now be ready, starting tests."
+          break
+        end
+        puts "Sleeping for 5 seconds while MySQL starts up...#{counter}/#{CONTAINER_START_SLEEP}"
+        sleep 5
+        counter += 5
+      end
+      if counter >= CONTAINER_START_SLEEP then
+         puts "TIMEOUT during startup."
+         @container.kill
+         @container.delete(:force => true)
+         exit 1
+      end
+
+      puts @container.logs({ :stdout => true, :stderr => true })
+      
       set :docker_container, @container.id
-      puts "Waiting for 30 seconds for prescript to complete."
-      sleep 30
     end
 
     describe "tests" do
