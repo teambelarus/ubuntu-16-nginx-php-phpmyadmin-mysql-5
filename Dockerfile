@@ -23,8 +23,8 @@ RUN \
     chmod 777 /var/lib/mysql && \
     chmod 777 -R /var/log/mysql && \
     chmod 755 /hooks/entrypoint-pre.d/50_phpmyadmin_setup /hooks/supervisord-pre.d/50_mysql_setup && \
-    sed -i -r -e 's/^#general_log_file\s+=.*/general_log_file=\/var\/log\/mysql\/mysql.log/g' /etc/mysql/mysql.conf.d/mysqld.cnf && \
-    sed -i -r -e 's/^#general_log\s+=.*/general_log = 1/g' /etc/mysql/mysql.conf.d/mysqld.cnf && \
+#    sed -i -r -e 's/^#general_log_file\s+=.*/general_log_file=\/var\/log\/mysql\/mysql.log/g' /etc/mysql/mysql.conf.d/mysqld.cnf && \
+#    sed -i -r -e 's/^#general_log\s+=.*/general_log = 1/g' /etc/mysql/mysql.conf.d/mysqld.cnf && \
     chmod 777 /docker-entrypoint-initdb.d && \
     chmod 755 /hooks
 
