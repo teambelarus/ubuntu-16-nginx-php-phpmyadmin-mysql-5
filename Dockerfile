@@ -28,5 +28,4 @@ RUN \
     sed -i -r -e '/\[mysqld\]/a skip-host-cache\nskip-name-resolve\ninnodb_use_native_aio = 0' /etc/mysql/mysql.conf.d/mysqld.cnf && \
     chmod 777 /docker-entrypoint-initdb.d && \
     chmod 755 /hooks
-
 EXPOSE 3306 8080
