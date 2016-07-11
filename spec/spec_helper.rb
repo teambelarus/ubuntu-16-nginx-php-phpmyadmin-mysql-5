@@ -19,23 +19,14 @@ set :docker_container_ready_regex, /mysqld_safe Starting mysqld daemon with data
 set :docker_container_create_options, {
   'Image'      => @image.id,
   'User'       => '100000',
-  'HostConfig' => {
-    'PortBindings' => { "#{MYSQL_PORT}/tcp" => [{ 'HostPort' => "#{MYSQL_PORT}" }] }
-  }
 }
 
 RSpec.configure do |c|
-
-  describe 'tests' do
-    describe package('mysql-server') do
-      it { should be_installed }
-    end
-
+  describe "tests" do
     include_examples 'docker-ubuntu-16'
     include_examples 'docker-ubuntu-16-nginx-1.10.0'
     include_examples 'php-7.0-tests'
     include_examples 'phpmyadmin-4.6-tests'
     include_examples 'mysql-tests'
   end
-
 end
