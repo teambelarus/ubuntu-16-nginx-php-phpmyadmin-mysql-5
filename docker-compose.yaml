@@ -1,14 +1,13 @@
 version: '2'
 services:
-  mysqltesting: 
+  ubuntu-16-nginx-php-phpmyadmin-mysql-5:
     build: .
-    image: mysqltesting 
+    image: ubuntu-16-nginx-php-phpmyadmin-mysql-5
     ports:
       - "3306:3306"
       - "8080:8080"
     user: "100000"
     environment:
-      - SUPERVISORD_LOGLEVEL=debug
-      - MYSQL_USER=drupal
-      - MYSQL_DATABASE=drupal
-      - MYSQL_PASSWORD=Fhtest123!
+      - MYSQL_USER=mytest
+      - MYSQL_DATABASE=mytest
+      - MYSQL_PASSWORD=testpass123
