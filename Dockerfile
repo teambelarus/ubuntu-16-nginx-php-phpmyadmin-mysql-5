@@ -7,7 +7,8 @@ COPY files/ /
 ENV MYSQL_ROOT_PASSWORD=ReplaceWithENVFromBuild \
     DISABLE_PHPMYADMIN=0 \
     PMA_ARBITRARY=0 \
-    PMA_HOST=localhost
+    PMA_HOST=localhost \
+    MYSQL_GENERAL_LOG=0
 
 RUN \
   groupadd mysql && \
@@ -22,7 +23,7 @@ RUN \
   chmod 777 -R /var/log/mysql && \
   chmod 755 /hooks/entrypoint-pre.d/50_phpmyadmin_setup /hooks/supervisord-pre.d/50_mysql_setup && \
   sed -i -r -e 's/^#general_log_file\s+=.*/general_log_file=\/var\/log\/mysql\/mysql.log/g' /etc/mysql/mysql.conf.d/mysqld.cnf && \
-  sed -i -r -e 's/^#general_log\s+=.*/general_log = 1/g' /etc/mysql/mysql.conf.d/mysqld.cnf && \
+  sed -i -r -e "s/^#general_log\s+=.*/general_log = ${MYSQL_GENERAL_LOG}/g" /etc/mysql/mysql.conf.d/mysqld.cnf && \
   sed -i -r -e '/\[mysqld\]/a skip-host-cache\nskip-name-resolve\ninnodb_use_native_aio = 0' /etc/mysql/mysql.conf.d/mysqld.cnf && \
   chmod 777 /docker-entrypoint-initdb.d && \
   chmod 755 /hooks
