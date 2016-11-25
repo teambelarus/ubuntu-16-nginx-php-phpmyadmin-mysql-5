@@ -21,6 +21,7 @@ RUN \
   sed -r -i -e 's/^bind-address\s+=\s+127\.0\.0\.1$/bind-address = 0.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf && \
   sed -i -r -e 's/^#general_log_file\s+=.*/general_log_file=\/var\/log\/mysql\/mysql.log/g' /etc/mysql/mysql.conf.d/mysqld.cnf && \
   sed -i -r -e '/\[mysqld\]/a skip-host-cache\nskip-name-resolve\ninnodb_use_native_aio = 0' /etc/mysql/mysql.conf.d/mysqld.cnf && \
+  chmod 777 /docker-entrypoint-initdb.d && \
   chmod -R 0777 /var/lib/mysql /var/log/mysql && \
   chmod -R 0775 /etc/mysql && \
   chmod -R 0755 /hooks
