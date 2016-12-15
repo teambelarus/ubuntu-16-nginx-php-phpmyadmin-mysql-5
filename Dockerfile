@@ -4,12 +4,6 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 COPY files/ /
 
-ENV MYSQL_ROOT_PASSWORD=ReplaceWithENVFromBuild \
-    DISABLE_PHPMYADMIN=0 \
-    PMA_ARBITRARY=0 \
-    PMA_HOST=localhost \
-    MYSQL_GENERAL_LOG=0
-
 RUN \
   groupadd mysql && \
   useradd -g mysql mysql && \
@@ -21,8 +15,19 @@ RUN \
   sed -r -i -e 's/^bind-address\s+=\s+127\.0\.0\.1$/bind-address = 0.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf && \
   sed -i -r -e 's/^#general_log_file\s+=.*/general_log_file=\/var\/log\/mysql\/mysql.log/g' /etc/mysql/mysql.conf.d/mysqld.cnf && \
   sed -i -r -e '/\[mysqld\]/a skip-host-cache\nskip-name-resolve\ninnodb_use_native_aio = 0' /etc/mysql/mysql.conf.d/mysqld.cnf && \
-  chmod 777 /docker-entrypoint-initdb.d && \
+  sed -i -r -e '/^query_cache_/d' /etc/mysql/mysql.conf.d/mysqld.cnf && \
+  chmod 0777 /docker-entrypoint-initdb.d && \
   chmod -R 0777 /var/lib/mysql /var/log/mysql && \
   chmod -R 0775 /etc/mysql && \
   chmod -R 0755 /hooks
+
+ENV MYSQL_ROOT_PASSWORD=ReplaceWithENVFromBuild \
+    DISABLE_PHPMYADMIN=0 \
+    PMA_ARBITRARY=0 \
+    PMA_HOST=localhost \
+    MYSQL_GENERAL_LOG=0 \
+    MYSQL_QUERY_CACHE_TYPE=1 \
+    MYSQL_QUERY_CACHE_SIZE=16M \
+    MYSQL_QUERY_CACHE_LIMIT=1M
+
 EXPOSE 3306 8080

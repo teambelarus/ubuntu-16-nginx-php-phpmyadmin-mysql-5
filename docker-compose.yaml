@@ -11,3 +11,4 @@ services:
       - MYSQL_USER=mytest
       - MYSQL_DATABASE=mytest
       - MYSQL_PASSWORD=testpass123
+      - MYSQL_QUERY_CACHE_SIZE=32M
