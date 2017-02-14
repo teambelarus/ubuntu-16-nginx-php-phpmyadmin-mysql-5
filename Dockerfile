@@ -9,8 +9,8 @@ RUN \
   useradd -g mysql mysql && \
   apt-get update && \
   apt-get install -y gettext-base mysql-server && \
-  rm -rf /var/lib/apt/lists/* /var/lib/mysql && \
-  mkdir --mode=0777 /var/lib/mysql /var/run/mysqld && \
+  rm -rf /var/lib/apt/lists/* /var/lib/mysql /etc/mysql* && \
+  mkdir --mode=0777 /var/lib/mysql /var/run/mysqld /etc/mysql && \
   chmod 0777 /docker-entrypoint-initdb.d && \
   chmod -R 0775 /etc/mysql && \
   chmod -R 0755 /hooks && \
