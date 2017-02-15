@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sed -i '/innodb_use_native_aio/a ignore-db-dir=lost+found' /etc/mysql/mysql.conf.d/mysqld.cnf
