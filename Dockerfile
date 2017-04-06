@@ -8,13 +8,18 @@ RUN \
   groupadd mysql && \
   useradd -g mysql mysql && \
   apt-get update && \
-  apt-get install -y gettext-base mysql-server && \
-  rm -rf /var/lib/apt/lists/* /var/lib/mysql /etc/mysql* && \
-  mkdir --mode=0777 /var/lib/mysql /var/run/mysqld /etc/mysql && \
+  apt-get install -y mysql-server && \
+  rm -rf /var/lib/apt/lists/* && \
+  rm -rf /var/lib/mysql && \
+  mkdir --mode=0777 /var/lib/mysql /var/run/mysqld && \
+  sed -r -i -e 's/^bind-address\s+=\s+127\.0\.0\.1$/bind-address = 0.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf && \
+  sed -i -r -e 's/^#general_log_file\s+=.*/general_log_file=\/var\/log\/mysql\/mysql.log/g' /etc/mysql/mysql.conf.d/mysqld.cnf && \
+  sed -i -r -e '/\[mysqld\]/a skip-host-cache\nskip-name-resolve\ninnodb_use_native_aio = 0' /etc/mysql/mysql.conf.d/mysqld.cnf && \
+  sed -i -r -e '/^query_cache_/d' /etc/mysql/mysql.conf.d/mysqld.cnf && \
   chmod 0777 /docker-entrypoint-initdb.d && \
+  chmod -R 0777 /var/lib/mysql /var/log/mysql && \
   chmod -R 0775 /etc/mysql && \
-  chmod -R 0755 /hooks && \
-  chmod -R 0777 /var/log/mysql
+  chmod -R 0755 /hooks
 
 ENV MYSQL_ROOT_PASSWORD=ReplaceWithENVFromBuild \
     DISABLE_PHPMYADMIN=0 \

@@ -19,9 +19,6 @@ set :docker_container_ready_regex, /mysqld_safe Starting mysqld daemon with data
 set :docker_container_create_options, {
   'Image'      => @image.id,
   'User'       => '100000',
-  'HostConfig' => {
-     'Memory' => 1000000000
-  }
 }
 
 RSpec.configure do |c|
