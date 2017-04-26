@@ -20,7 +20,7 @@ set :docker_container_create_options, {
   'Image'      => @image.id,
   'User'       => '100000',
   'HostConfig' => {
-     'Memory' => 1000000000
+     'Memory' => 1073741824
   }
 }
 
