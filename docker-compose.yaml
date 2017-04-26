@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 services:
   ubuntu-16-nginx-php-phpmyadmin-mysql-5:
     build: .
@@ -12,3 +12,4 @@ services:
       - MYSQL_DATABASE=mytest
       - MYSQL_PASSWORD=testpass123
       - MYSQL_QUERY_CACHE_SIZE=32M
+    mem_limit: 2046m
