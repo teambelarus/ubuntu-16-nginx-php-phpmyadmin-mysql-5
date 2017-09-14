@@ -14,7 +14,10 @@ RUN \
   chmod 0777 /docker-entrypoint-initdb.d && \
   chmod -R 0775 /etc/mysql && \
   chmod -R 0755 /hooks && \
-  chmod -R 0777 /var/log/mysql
+  chmod -R 0777 /var/log/mysql && \
+  cd /opt/configurability/src/ && \
+  pip --no-cache install --upgrade pip && \
+  pip --no-cache install --upgrade .
 
 ENV MYSQL_ROOT_PASSWORD=ReplaceWithENVFromBuild \
     DISABLE_PHPMYADMIN=0 \
