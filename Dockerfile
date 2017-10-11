@@ -8,7 +8,7 @@ RUN \
   groupadd mysql && \
   useradd -g mysql mysql && \
   apt-get update && \
-  apt-get install -y gettext-base mysql-server && \
+  apt-get install -y gettext-base mysql-server pwgen && \
   rm -rf /var/lib/apt/lists/* /var/lib/mysql /etc/mysql* && \
   mkdir --mode=0777 /var/lib/mysql /var/run/mysqld /etc/mysql && \
   chmod 0777 /docker-entrypoint-initdb.d && \
@@ -19,8 +19,7 @@ RUN \
   pip --no-cache install --upgrade pip && \
   pip --no-cache install --upgrade .
 
-ENV MYSQL_ROOT_PASSWORD=ReplaceWithENVFromBuild \
-    DISABLE_PHPMYADMIN=0 \
+ENV DISABLE_PHPMYADMIN=0 \
     PMA_ARBITRARY=0 \
     PMA_HOST=localhost \
     MYSQL_GENERAL_LOG=0 \
