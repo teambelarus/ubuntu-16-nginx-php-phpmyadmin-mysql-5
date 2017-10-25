@@ -15,10 +15,11 @@ Please note this image is explictly intended to be run as a non-privileged user.
 
 ```bash
 UID=999
-PORT=80
-WEB_ROOT="/var/www/"
+DB_PORT=3306
+WEB_ADMIN_PORT=80
+DB_ROOT="/my/local/path/"
 
-docker run -u ${UID}:0 -p ${PORT}:8080 -v ${WEB_ROOT}:/var/lib/mysql/ 1and1internet/ubuntu-16-nginx-php-phpmyadmin-mysql-5
+docker run -u ${UID}:0 -p ${DB_PORT}:3306 -p ${WEB_ADMIN_PORT}:8080 -v ${DATABASE_ROOT}:/var/lib/mysql/ 1and1internet/ubuntu-16-nginx-php-phpmyadmin-mysql-5
 ```
 
 ## Environment Variables
