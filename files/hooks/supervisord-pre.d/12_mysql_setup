@@ -94,6 +94,12 @@ if [ ! -d "${DIRECTORY}/mysql" ]; then
         mysql_tzinfo_to_sql /usr/share/zoneinfo | sed 's/Local time zone must be set--see zic manual page/FCTY/' | "${mysql[@]}" mysql
     }
 
+    function remove_existing_users {
+
+        echo "Removing existing users"
+        echo 'DELETE FROM mysql.user ;' | "${mysql[@]}"
+    }
+
     function create_admin_user {
 
         local USERNAME=$1
@@ -204,6 +210,8 @@ EOSQL
         mysql_tzinit
     fi
     echo
+
+    remove_existing_users
 
     # Setup admin user(s)
     #
